@@ -51,12 +51,12 @@
     <param name="goalClearRange" type="double" value="0.5" />
     <param name="goalX" type="double" value="$(arg goalX)" />
     <param name="goalY" type="double" value="$(arg goalY)" />
-    
+
     <param name="sensorFrame" type="string" value="body" />
     <param name="vehicleFrame" type="string" value="body" />
-
     <remap from="/state_estimation" to="/Odometry" />
     <remap from="/registered_scan" to="/cloud_registered" />
+    <remap from="/way_point" to="/way_point" />
   </node>
 
   <node pkg="local_planner" type="pathFollower" name="pathFollower" output="screen" required="true">
@@ -92,6 +92,12 @@
     <param name="sensorFrame" type="string" value="body" />
     <param name="vehicleFrame" type="string" value="body" />
     <remap from="/state_estimation" to="/Odometry" />
+    
+    <remap from="/cmd_vel" to="/cmd_vel_stamped" />
   </node>
 
-  </launch>
+  <node pkg="local_planner" type="cmd_vel_converter.py" name="cmd_vel_converter" output="screen" />
+
+  <node pkg="tf" type="static_transform_publisher" name="body_to_vehicle_tf" args="0 0 0 0 0 0 /body /vehicle 100"/>
+
+</launch>
