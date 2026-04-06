@@ -5,6 +5,7 @@
     <arg name="scan_cloud_topic" default="/cloud_registered"/>
     <arg name="terrain_topic" default="/terrain_map"/>
     <arg name="enable_person_tracker_topic_bridge" default="true"/>
+    <arg name="launch_rviz" default="true"/>
 
     <!-- person_tracker odometry naming compatibility -->
     <node if="$(arg enable_person_tracker_topic_bridge)" pkg="topic_tools" type="relay" name="odometry_to_local_odom_relay" args="/Odometry /local_odom" />
@@ -24,5 +25,6 @@
         <arg name="terrain_cloud_topic" value="$(arg terrain_topic)"/>
         <arg name="terrain_local_topic" value="$(arg terrain_topic)"/>
         <arg name="config" value="$(arg far_config)"/>
+        <arg name="launch_rviz" value="$(arg launch_rviz)"/>
     </include>
 </launch>
