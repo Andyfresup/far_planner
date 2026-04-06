@@ -19,9 +19,54 @@ catkin_make
 
 ## 3. 运行指南 (Usage)
 
-请在不同的终端窗口中分别运行以下模块。
+本仓库提供两种启动方式：
 
-### 7.3 地形分析 (Terrain Analysis)
+- 推荐：统一启动（task5）
+- 兼容：分模块启动（传统方式）
+
+### 3.1 推荐：统一启动 (task5)
+
+统一启动会同时拉起：
+
+- `terrain_analysis`
+- `local_planner`
+- `far_planner`
+- person_tracker 兼容话题桥接
+
+```bash
+cd far_planner
+source devel/setup.bash
+roslaunch far_planner task5_farplanner.launch
+```
+
+可选参数示例：
+
+```bash
+roslaunch far_planner task5_farplanner.launch far_config:=default odom_topic:=/Odometry scan_cloud_topic:=/cloud_registered terrain_topic:=/terrain_map
+```
+
+默认话题约定：
+
+- 里程计输入：`/Odometry`
+- 点云输入：`/cloud_registered`
+- 地形图：`/terrain_map`
+
+person_tracker 兼容桥接（默认开启）：
+
+- `/Odometry -> /local_odom`（relay）
+- `/move_base_simple/goal (PoseStamped) -> /way_point (PointStamped)`
+
+如不需要兼容桥接，可关闭：
+
+```bash
+roslaunch far_planner task5_farplanner.launch enable_person_tracker_topic_bridge:=false
+```
+
+### 3.2 兼容：分模块启动 (传统方式)
+
+请在不同终端窗口分别运行以下模块。
+
+### 3.2.1 地形分析 (Terrain Analysis)
 
 该模块负责分析环境地形，提供可通行区域信息。
 
@@ -31,7 +76,7 @@ source devel/setup.bash
 roslaunch terrain_analysis terrain_analysis.launch
 ```
 
-### 7.4 宏观大脑 (FAR Planner)
+### 3.2.2 宏观大脑 (FAR Planner)
 
 全局规划器，负责生成宏观路径。
 
@@ -41,7 +86,7 @@ source devel/setup.bash
 roslaunch far_planner far_planner.launch
 ```
 
-### 7.5 微观司机 (Local Planner)
+### 3.2.3 微观司机 (Local Planner)
 
 局部规划器，负责具体的运动控制和避障。
 
